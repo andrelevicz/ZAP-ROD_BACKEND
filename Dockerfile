@@ -42,7 +42,7 @@ RUN groupadd -g 1000 appgroup && useradd -m -u 1000 -g appgroup appuser
 USER appuser
 
 # Expose the application port
-EXPOSE 9000
+EXPOSE 9001
 
 # Start the PHP FastCGI Process Manager
 CMD ["php-fpm"]

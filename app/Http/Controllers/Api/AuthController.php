@@ -36,8 +36,8 @@ class AuthController extends Controller
 
             $token = auth()->claims([
                 'user_id' => $user->id,
-                'permissions' => $user->permissions, // Supondo que tenha um método que obtenha as permissões
-                'entity_id' => $user->entity_id, // Exemplo de entidade associada ao usuário
+                'permissions' => $user->permissions, 
+                'entity_id' => $user->entity_id,
             ])->login($user);
     
             return $this->respondWithToken($token);
