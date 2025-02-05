@@ -4,15 +4,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    user: "1000:1000"
+    user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - .:/var/www/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - db
+      - mailpit
     environment:
       - DB_HOST=db
-      - DB_PORT=5433
+      - DB_PORT=5432
       - DB_DATABASE=zaprod_db
       - DB_USERNAME=zaprod_user
       - DB_PASSWORD=Zaprod123
@@ -40,6 +41,14 @@ services:
       - "5433:5432"
     volumes:
       - zaprod_postgres_data:/var/lib/postgresql/data
-
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_MAX_MESSAGES: 5000
 volumes:
   zaprod_postgres_data:

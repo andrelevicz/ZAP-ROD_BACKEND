@@ -1,110 +1,46 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Requests\Auth\LoginOtpRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\RequestOtpRequest;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
+    public function __construct(protected AuthService $authService) {}
 
-        /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        return response()->json($this->authService->register($request->validated()));
     }
 
-    public function register(Request $request)
+    public function login(LoginRequest $request): JsonResponse
     {
-        try {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:6|confirmed',
-            ]);
-    
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
-
-            $token = auth()->claims([
-                'user_id' => $user->id,
-                'permissions' => $user->permissions, 
-                'entity_id' => $user->entity_id,
-            ])->login($user);
-    
-            return $this->respondWithToken($token);
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::info('Register failed for credentials: ', $request->all());
-            return response()->json(['error' => $e->getMessage()], 401);
-        }
-    }
-    
-    public function login(Request $request)
-    {
-        $credentials = $request->only(['email', 'password']);
-    
-
-        if (!$token = auth()->attempt($credentials)) {
-            \Illuminate\Support\Facades\Log::info('Login failed for credentials: ', $credentials);
-            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
-        }
-    
-        $user = auth()->user();
-    
-        $token = auth()->claims([
-            'user_id' => $user->id,
-        ])->fromUser($user);
-    
-        return $this->respondWithToken($token);
-    }
-    
-
-    
-
-    public function logout()
-    {
-        auth()->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json($this->authService->login($request->validated()));
     }
 
-    public function me()
+    public function requestLoginOtp(RequestOtpRequest $request): JsonResponse
     {
-        return response()->json(auth()->user());
+        $this->authService->requestLoginOtp($request->validated()['email']);
+        return response()->json(['message' => 'OTP enviado com sucesso.']);
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
+    public function loginWithOtp(LoginOtpRequest $request): JsonResponse
     {
-        return $this->respondWithToken(auth()->refresh());
+        return response()->json($this->authService->loginWithOtp(
+            $request->validated()['email'],
+            $request->validated()['otp_code']
+        ));
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
+    public function logout(): JsonResponse
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
+        $this->authService->logout();
+        return response()->json(['message' => 'Logout realizado com sucesso.']);
     }
-
 }

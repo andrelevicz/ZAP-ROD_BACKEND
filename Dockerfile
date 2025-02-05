@@ -1,5 +1,5 @@
 # Use the official PHP image as a base
-FROM php:8.1-fpm
+FROM php:8.3-fpm
 
 # Set the working directory inside the container
 WORKDIR /var/www/html
@@ -23,6 +23,9 @@ RUN apt-get update && apt-get install -y \
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Adicionar o diretório como confiável para o Git
+RUN git config --global --add safe.directory /var/www/html
 
 # Install project dependencies with Composer
 RUN composer install --no-dev --optimize-autoloader

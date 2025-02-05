@@ -186,4 +186,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'otp_expiry' => env('OTP_EXPIRY', 10),
+
 ];
