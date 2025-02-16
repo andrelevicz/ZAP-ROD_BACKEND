@@ -159,7 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+       
         /*
          * Application Service Providers...
          */
@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        App\Providers\TenancyServiceProvider::class,
     ])->toArray(),
 
     /*

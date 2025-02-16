@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Tenant;
 
 // database/seeders/CarDealershipSeeder.php
 
