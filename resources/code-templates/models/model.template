@@ -1,0 +1,10 @@
+<?php
+
+namespace {{namespace}};
+
+use {{namespace}}\_base\{{class}}Base;
+
+class {{class}} extends {{class}}Base
+{
+    // Defina aqui os atributos e métodos específicos
+}
