@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->foreignUlid('order_id')->constrained('orders');
+            $table->string('stripe_payment_id')->unique(); // ID da transação no Stripe
+            $table->decimal('amount', 10, 2);
+            $table->string('currency')->default('BRL');
+            $table->string('status'); // Ex: succeeded, pending, failed
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('payments');
     }
 };

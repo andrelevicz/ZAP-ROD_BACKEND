@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('company_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_personal_info_id')
-              ->constrained('companies_personal_infos')
+            $table->foreignKey('company_personal_info_id')
+              ->references('id')
+              ->on('companies_personal_infos')
               ->onDelete('cascade');
             $table->text('description')->nullable();
             $table->text('products_services')->nullable();
