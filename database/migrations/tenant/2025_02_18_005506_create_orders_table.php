@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->ulid('id')->primary(); // ULID para URLs públicas
-            $table->foreignUlid('company_id')->constrained('companies_personal_infos');
-            $table->foreignUlid('lead_id')->nullable()->constrained('leads'); // Se convertido de um lead
+            $table->ulid('id')->primary();
+            $table->foreignUlid('lead_id')->nullable()->constrained('leads');
             $table->decimal('total', 10, 2);
-            $table->string('status')->default('pending'); // Ex: pending, paid, shipped, cancelled
-            $table->string('tracking_code')->nullable(); // Código de rastreio
-            $table->timestamp('paid_at')->nullable(); // Data de confirmação de pagamento
+            $table->unsignedInteger('status');
+            $table->string('tracking_code')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }

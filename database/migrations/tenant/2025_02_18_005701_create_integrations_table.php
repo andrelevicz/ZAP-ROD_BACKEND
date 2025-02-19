@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('integrations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignUlid('company_id')->constrained('companies_personal_infos');
-            $table->string('service'); // Ex: Stripe, Correios, Mercado Envios
-            $table->json('credentials'); // Chaves API (armazenadas criptografadas)
+            $table->ulid();
+            $table->string('name');
+            $table->string('service');
+            $table->json('credentials'); 
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

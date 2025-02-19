@@ -8,7 +8,7 @@ class CreateCompaniesTable extends Migration
 {
     public function up()
     {
-        Schema::create('companies_personal_infos', function (Blueprint $table) {
+        Schema::create('company', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');
             $table->string("fantasy_name")->nullable();
@@ -16,8 +16,7 @@ class CreateCompaniesTable extends Migration
             $table->string('legal_email')->unique();
             $table->string('phone', 20);
             $table->string('address');
-            $table->string('stripe_customer_id')->nullable()->unique();
-            $table->json('payment_settings')->nullable();
+            $table->string('gateway_custumer_receiver_id')->nullable()->unique();
             $table->timestamps(); 
             $table->softDeletes();
         });

@@ -9,14 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+  // database/migrations/tenant/[timestamp]_create_payment_methods_table.php
     public function up(): void
     {
-        Schema::create('company_sales_infos', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->ulid();
-            $table->text('description')->nullable();
-            $table->json('social_links')->nullable();
-            $table->text('delivery_description')->nullable();
-            $table->text('returns_description')->nullable();
+            $table->string('type');
+            $table->string('name');
+            $table->boolean('is_active')->default(true);
+            $table->json('settings')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('company_profiles');
+        Schema::dropIfExists('payments_method');
     }
 };
