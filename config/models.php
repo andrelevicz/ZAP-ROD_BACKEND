@@ -25,6 +25,7 @@ return [
         |
         */
 
+        'overwrite' => true,
 
         'path' => app_path('Models/Base'),
 

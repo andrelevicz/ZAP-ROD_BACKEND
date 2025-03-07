@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('company_sales_infos', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id');
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->text('description')->nullable();
             $table->json('social_links')->nullable();
             $table->text('delivery_description')->nullable();

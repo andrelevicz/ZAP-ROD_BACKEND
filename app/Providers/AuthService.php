@@ -21,10 +21,47 @@ class AuthService
     public function register(array $data): array
     {
         $user = User::create([
-            'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        
+
+
+        $otpCode = Otp::expiry(config('app.otp_expiry'))->generate(md5($user->email));
+
+        SendOtpMailJob::dispatchAfterResponse($user->email, $otpCode);
+
+        return [
+            'message' => 'Registro realizado com sucesso. Valide seu email para ativar o seu login.'
+        ];
+
+
+    }
+
+    /**
+     * Request an OTP for login.
+     *
+     * @param string $email
+     * @return void
+     */
+    public function verifyRegisterOtp(string $email, string $otpCode): array
+    {
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            throw new UnauthorizedException ('Usuário não encontrado.');
+        }
+
+        $match = Otp::expiry(config('app.otp_expiry'))->match($otpCode, md5($user->email));
+
+        if (!$match) {
+            throw new UnprocessableEntityHttpException('Código OTP inválido.');
+        }
+
+        Otp::forget(md5($user->email));
+
+        $user->email_verified = true;
+        $user->save();
 
         $token = Auth::claims([
             'user_id' => $user->id,
@@ -35,14 +72,10 @@ class AuthService
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
         ];
+
     }
 
-    /**
-     * Request an OTP for login.
-     *
-     * @param string $email
-     * @return void
-     */
+
     public function requestLoginOtp(string $email): void
     {
         $user = User::where('email', $email)->first();

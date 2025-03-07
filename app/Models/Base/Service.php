@@ -11,47 +11,49 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Product
+ * Class Service
  * 
  * @property int $id
  * @property string $company_id
  * @property string $name
  * @property string|null $description
- * @property float $price
- * @property string|null $link
+ * @property string|null $requirements
+ * @property float|null $price
+ * @property int|null $duration
+ * @property int $modality
  * @property int|null $category_id
  * @property bool $is_available
- * @property int $stock
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
  * @property Company $company
  * @property Category|null $category
  * @property Collection|Tag[] $tags
- * @property Collection|OrderItem[] $order_items
  *
  * @package App\Models\Base
  */
-class Product extends Model
+class Service extends Model
 {
-	protected $table = 'products';
+	protected $table = 'services';
 
 	protected $casts = [
 		'price' => 'float',
+		'duration' => 'int',
+		'modality' => 'int',
 		'category_id' => 'int',
-		'is_available' => 'bool',
-		'stock' => 'int'
+		'is_available' => 'bool'
 	];
 
 	protected $fillable = [
 		'company_id',
 		'name',
 		'description',
+		'requirements',
 		'price',
-		'link',
+		'duration',
+		'modality',
 		'category_id',
-		'is_available',
-		'stock'
+		'is_available'
 	];
 
 	public function company()
@@ -67,11 +69,6 @@ class Product extends Model
 	public function tags()
 	{
 		return $this->belongsToMany(Tag::class)
-					->withPivot('id', 'company_id');
-	}
-
-	public function order_items()
-	{
-		return $this->hasMany(OrderItem::class);
+					->withPivot('id');
 	}
 }

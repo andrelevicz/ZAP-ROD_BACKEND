@@ -8,8 +8,9 @@ class CreateCompaniesTable extends Migration
 {
     public function up()
     {
-        Schema::create('company', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->ulid('id')->primary();
+            $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string("fantasy_name")->nullable();
             $table->string('cnpj', 14)->unique();

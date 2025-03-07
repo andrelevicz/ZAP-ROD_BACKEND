@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
+        Schema::create('payments', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignUlid('order_id')->constrained('orders');
-            $table->foreignId('product_id')->constrained('products');
-            $table->integer('quantity');
-            $table->decimal('unit_price', 10, 2); // Preço no momento da compra
+            $table->string('gateway_payment_id')->unique();
+            $table->decimal('amount', 10, 2);
+            $table->string('currency')->default('BRL');
+            $table->unsignedInteger('status');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders_items');
+        Schema::dropIfExists('payments');
     }
 };

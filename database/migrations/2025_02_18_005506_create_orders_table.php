@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->ulid('id')->primary();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignUlid('lead_id')->nullable()->constrained('leads');
             $table->decimal('total', 10, 2);
             $table->unsignedInteger('status');

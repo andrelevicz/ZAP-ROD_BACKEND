@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Criar tabela de categorias
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name')->unique();
             $table->timestamps();
         });
 
-        // Criar tabela de produtos
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
+            $table->string('link')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->boolean('is_available')->default(false);
             $table->integer('stock')->default(0);
@@ -32,12 +33,14 @@ return new class extends Migration
 
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name')->unique();
             $table->timestamps();
         });
 
         Schema::create('product_tag', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
         });

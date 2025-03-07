@@ -13,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_methods', function (Blueprint $table) {
-            $table->ulid();
+            $table->ulid('id');
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('type');
             $table->string('name');
             $table->boolean('is_active')->default(true);

@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Subscription
  * 
  * @property int $id
- * @property int $company_id
  * @property int|null $plan_id
  * @property Carbon $start_date
  * @property Carbon|null $end_date
@@ -22,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Company $company
  * @property Plan|null $plan
  * @property Collection|Module[] $modules
  *
@@ -33,24 +31,17 @@ class Subscription extends Model
 	protected $table = 'subscriptions';
 
 	protected $casts = [
-		'company_id' => 'int',
 		'plan_id' => 'int',
 		'start_date' => 'datetime',
 		'end_date' => 'datetime'
 	];
 
 	protected $fillable = [
-		'company_id',
 		'plan_id',
 		'start_date',
 		'end_date',
 		'status'
 	];
-
-	public function company()
-	{
-		return $this->belongsTo(Company::class);
-	}
 
 	public function plan()
 	{

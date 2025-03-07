@@ -8,14 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('user_billing_info', function (Blueprint $table) {
+        Schema::create('user_gateway_info', function (Blueprint $table) {
             $table->ulid('id')->primary();
 
-            $table->ulid('user_id');
-            $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
+            $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
 
             $table->string('stripe_customer_id')->nullable()->unique();
             $table->string('stripe_payment_method_id')->nullable();

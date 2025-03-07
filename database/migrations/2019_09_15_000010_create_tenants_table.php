@@ -15,12 +15,11 @@ class CreateTenantsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenants', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->ulid('user_id');
-            $table->timestamps();
-            $table->json('data')->nullable();
-        });
+        // Schema::create('tenants', function (Blueprint $table) {
+        //     $table->string('id')->primary();
+        //     $table->timestamps();
+        //     $table->json('data')->nullable();
+        // });
     }
 
     /**

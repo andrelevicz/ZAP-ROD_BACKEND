@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('integrations', function (Blueprint $table) {
             $table->ulid();
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name');
             $table->string('service');
             $table->json('credentials'); 
