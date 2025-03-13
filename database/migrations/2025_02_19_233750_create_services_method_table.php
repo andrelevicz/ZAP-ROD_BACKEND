@@ -16,7 +16,6 @@ return new class extends Migration
             $table->text('requirements')->nullable();
             $table->decimal('price', 10, 2)->nullable();
             $table->integer('duration')->nullable();
-            $table->unsignedInteger('modality');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null'); 
             $table->boolean('is_available')->default(true);
             $table->timestamps();

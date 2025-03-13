@@ -10,7 +10,6 @@ use App\Http\Requests\Auth\RequestOtpRequest;
 use App\Http\Requests\Auth\VerifyRegisterOtpRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -39,17 +38,17 @@ class AuthController extends Controller
     {
         try { 
             $this->authService->verifyRegisterOtp($request->validated()['email'], $request->validated()['otp_code']);
-            return response()->json(['message' => 'OTP enviado com sucesso.']);
+            return response()->json(['message' => 'Email verificado com sucesso']);
         } catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 401);
             }
         
     }
 
-    public function requestLoginOtp(RequestOtpRequest $request): JsonResponse
+    public function requestOtp(RequestOtpRequest $request): JsonResponse
     {
         try { 
-            $this->authService->requestLoginOtp($request->validated()['email']);
+            $this->authService->requestOtp($request->validated()['email']);
             return response()->json(['message' => 'OTP enviado com sucesso.']);
         } catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 401);

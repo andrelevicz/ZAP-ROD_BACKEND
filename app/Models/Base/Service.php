@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $requirements
  * @property float|null $price
  * @property int|null $duration
- * @property int $modality
  * @property int|null $category_id
  * @property bool $is_available
  * @property Carbon|null $created_at
@@ -39,9 +38,9 @@ class Service extends Model
 	protected $casts = [
 		'price' => 'float',
 		'duration' => 'int',
-		'modality' => 'int',
 		'category_id' => 'int',
-		'is_available' => 'bool'
+		'is_available' => 'bool',
+		'company_id' => 'string'
 	];
 
 	protected $fillable = [
@@ -51,7 +50,6 @@ class Service extends Model
 		'requirements',
 		'price',
 		'duration',
-		'modality',
 		'category_id',
 		'is_available'
 	];

@@ -59,7 +59,7 @@ class AuthService
 
         Otp::forget(md5($user->email));
 
-        $user->email_verified = true;
+        $user->email_verified_at = now();
         $user->save();
 
         $token = Auth::claims([
@@ -75,7 +75,7 @@ class AuthService
     }
 
 
-    public function requestLoginOtp(string $email): void
+    public function requestOtp(string $email): void
     {
         $user = User::where('email', $email)->first();
 

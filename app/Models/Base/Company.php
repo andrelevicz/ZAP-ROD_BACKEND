@@ -18,10 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $user_id
  * @property string $name
  * @property string|null $fantasy_name
- * @property string $cnpj
+ * @property string|null $cnpj
  * @property string $legal_email
  * @property string $phone
- * @property string $address
  * @property string|null $gateway_custumer_receiver_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -40,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Integration $integration
  * @property PaymentMethod $payment_method
  * @property Collection|Service[] $services
+ * @property Collection|Address[] $addresses
  *
  * @package App\Models\Base
  */
@@ -56,7 +56,6 @@ class Company extends Model
 		'cnpj',
 		'legal_email',
 		'phone',
-		'address',
 		'gateway_custumer_receiver_id'
 	];
 
@@ -123,5 +122,10 @@ class Company extends Model
 	public function services()
 	{
 		return $this->hasMany(Service::class);
+	}
+
+	public function addresses()
+	{
+		return $this->hasMany(Address::class);
 	}
 }

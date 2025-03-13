@@ -6,10 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-  // database/migrations/tenant/[timestamp]_create_payment_methods_table.php
     public function up(): void
     {
         Schema::create('payment_methods', function (Blueprint $table) {

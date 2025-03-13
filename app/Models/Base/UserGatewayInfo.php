@@ -17,12 +17,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $user_id
  * @property string|null $stripe_customer_id
  * @property string|null $stripe_payment_method_id
- * @property string $address_line1
+ * @property string|null $stripe_subscription_id
+ * @property string|null $address_line1
  * @property string|null $address_line2
- * @property string $city
- * @property string $state
- * @property string $postal_code
- * @property string $country_code
+ * @property string|null $city
+ * @property string|null $state
+ * @property string|null $postal_code
+ * @property string|null $country_code
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
@@ -41,6 +42,7 @@ class UserGatewayInfo extends Model
 		'user_id',
 		'stripe_customer_id',
 		'stripe_payment_method_id',
+		'stripe_subscription_id',
 		'address_line1',
 		'address_line2',
 		'city',
