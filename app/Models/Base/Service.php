@@ -39,8 +39,7 @@ class Service extends Model
 		'price' => 'float',
 		'duration' => 'int',
 		'category_id' => 'int',
-		'is_available' => 'bool',
-		'company_id' => 'string'
+		'is_available' => 'bool'
 	];
 
 	protected $fillable = [

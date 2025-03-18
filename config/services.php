@@ -39,5 +39,14 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'evolution' => [
+        'api_key' => env('EVOLUTION_API_KEY', 'default-key'),
+        'api_url' => env('EVOLUTION_API_URL_', 'http://localhost:8080/'),
+    ],
+
+    'n8n' => [
+        'webhook_url' => env('N8N_URL_WEBHOOK')
+    ]
+
 
 ];
