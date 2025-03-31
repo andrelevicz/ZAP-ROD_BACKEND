@@ -41,7 +41,7 @@ return [
 
     'evolution' => [
         'api_key' => env('EVOLUTION_API_KEY', 'default-key'),
-        'api_url' => env('EVOLUTION_API_URL_', 'http://localhost:8080/'),
+        'api_url' => env('EVOLUTION_API_URL', 'http://evolution_api:8080'),
     ],
 
     'n8n' => [

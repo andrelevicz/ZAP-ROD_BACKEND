@@ -27,6 +27,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * 
  * @property User $user
+ * @property Collection|Payment[] $payments
+ * @property Integration $integration
+ * @property PaymentMethod $payment_method
+ * @property Collection|Service[] $services
+ * @property Collection|Address[] $addresses
+ * @property Collection|Instance[] $instances
  * @property CompanySalesInfo $company_sales_info
  * @property Collection|Category[] $categories
  * @property Collection|Product[] $products
@@ -35,11 +41,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Collection|Lead[] $leads
  * @property Collection|Order[] $orders
  * @property Collection|OrderItem[] $order_items
- * @property Collection|Payment[] $payments
- * @property Integration $integration
- * @property PaymentMethod $payment_method
- * @property Collection|Service[] $services
- * @property Collection|Address[] $addresses
  *
  * @package App\Models\Base
  */
@@ -62,6 +63,36 @@ class Company extends Model
 	public function user()
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	public function payments()
+	{
+		return $this->hasMany(Payment::class);
+	}
+
+	public function integration()
+	{
+		return $this->hasOne(Integration::class);
+	}
+
+	public function payment_method()
+	{
+		return $this->hasOne(PaymentMethod::class);
+	}
+
+	public function services()
+	{
+		return $this->hasMany(Service::class);
+	}
+
+	public function addresses()
+	{
+		return $this->hasMany(Address::class);
+	}
+
+	public function instances()
+	{
+		return $this->hasMany(Instance::class);
 	}
 
 	public function company_sales_info()
@@ -102,30 +133,5 @@ class Company extends Model
 	public function order_items()
 	{
 		return $this->hasMany(OrderItem::class);
-	}
-
-	public function payments()
-	{
-		return $this->hasMany(Payment::class);
-	}
-
-	public function integration()
-	{
-		return $this->hasOne(Integration::class);
-	}
-
-	public function payment_method()
-	{
-		return $this->hasOne(PaymentMethod::class);
-	}
-
-	public function services()
-	{
-		return $this->hasMany(Service::class);
-	}
-
-	public function addresses()
-	{
-		return $this->hasMany(Address::class);
 	}
 }

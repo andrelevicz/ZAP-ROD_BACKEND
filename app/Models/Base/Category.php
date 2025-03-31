@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property Company $company
- * @property Collection|Product[] $products
  * @property Collection|Service[] $services
+ * @property Collection|Product[] $products
  *
  * @package App\Models\Base
  */
@@ -39,13 +39,13 @@ class Category extends Model
 		return $this->belongsTo(Company::class);
 	}
 
-	public function products()
-	{
-		return $this->hasMany(Product::class);
-	}
-
 	public function services()
 	{
 		return $this->hasMany(Service::class);
+	}
+
+	public function products()
+	{
+		return $this->hasMany(Product::class);
 	}
 }

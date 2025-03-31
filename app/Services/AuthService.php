@@ -130,16 +130,23 @@ class AuthService
      */
     public function login(array $credentials): array
     {
+        $user = User::where('email', $credentials['email'])->first();
+    
+        if (!$user) {
+            throw new UnauthorizedException('Credenciais inválidas.');
+        }
+
         if (!$token = Auth::attempt($credentials)) {
             throw new UnauthorizedException('Credenciais inválidas.');
         }
 
-        $user = Auth::user();
-
+        if (!Auth::user()->hasVerifiedEmail()) {
+            Auth::logout();
+            throw new UnauthorizedException('Email não verificado.');
+        }
+    
         return [
-            'access_token' => Auth::claims([
-                'user_id' => $user->id,
-            ])->fromUser($user),
+            'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
         ];

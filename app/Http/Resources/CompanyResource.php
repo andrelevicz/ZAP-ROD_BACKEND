@@ -16,8 +16,16 @@ class CompanyResource extends JsonResource
             'legal_email' => $this->legal_email,
             'phone' => $this->phone,
             'gateway_custumer_receiver_id' => $this->gateway_custumer_receiver_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString()
+        ];
+    }
+
+    public function with($request)
+    {
+        return [
+            'message' => 'Empresa criada com sucesso',
+            'status' => 201
         ];
     }
 }

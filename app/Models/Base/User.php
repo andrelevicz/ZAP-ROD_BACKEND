@@ -23,8 +23,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * 
- * @property Collection|UserGatewayInfo[] $user_gateway_infos
+ * @property Collection|Instance[] $instances
  * @property Collection|Company[] $companies
+ * @property Collection|UserGatewayInfo[] $user_gateway_infos
  *
  * @package App\Models\Base
  */
@@ -49,13 +50,18 @@ class User extends Model
 		'google_id'
 	];
 
-	public function user_gateway_infos()
+	public function instances()
 	{
-		return $this->hasMany(UserGatewayInfo::class);
+		return $this->hasMany(Instance::class);
 	}
 
 	public function companies()
 	{
 		return $this->hasMany(Company::class);
+	}
+
+	public function user_gateway_infos()
+	{
+		return $this->hasMany(UserGatewayInfo::class);
 	}
 }

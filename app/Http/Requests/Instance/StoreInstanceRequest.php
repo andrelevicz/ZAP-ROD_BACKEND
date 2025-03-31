@@ -13,6 +13,19 @@ class StoreInstanceRequest extends FormRequest
 
     public function rules(): array
     {
-        return [];
+        return [
+            'instance_name' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'ulid', 'exists:companies,id']
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'instance_name.required' => 'O nome da instância é obrigatório.',
+            'instance_name.max' => 'O nome da instância deve ter no máximo 255 caracteres.',
+            'company_id.required' => 'A instância deve pertencer a uma empresa.',
+            'company_id.ulid' => 'A instância deve pertencer a uma empresa.',
+        ];
     }
 }

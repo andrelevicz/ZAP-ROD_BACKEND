@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property Company $company
- * @property Collection|Product[] $products
  * @property Collection|Service[] $services
+ * @property Collection|Product[] $products
  *
  * @package App\Models\Base
  */
@@ -39,15 +39,15 @@ class Tag extends Model
 		return $this->belongsTo(Company::class);
 	}
 
-	public function products()
-	{
-		return $this->belongsToMany(Product::class)
-					->withPivot('id', 'company_id');
-	}
-
 	public function services()
 	{
 		return $this->belongsToMany(Service::class)
 					->withPivot('id');
+	}
+
+	public function products()
+	{
+		return $this->belongsToMany(Product::class)
+					->withPivot('id', 'company_id');
 	}
 }

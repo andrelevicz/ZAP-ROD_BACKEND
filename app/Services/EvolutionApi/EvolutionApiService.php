@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\EvolutionApi;
 
 use App\Exceptions\EvolutionApiException;
 use Illuminate\Http\Client\Response;
@@ -52,11 +52,23 @@ class EvolutionApiService
 
     public function createInstance(array $instanceData): array
     {
-        return $this->sendRequest(
-            'post', 
-            '/instance/create', 
-            $this->withDefaultSettings($instanceData)
-        )->json();
+        $payload = [
+            'instanceName' => $instanceData['instanceName'],
+            'integration' => 'WHATSAPP-BAILEYS',
+            "qrcode" => true,
+            "groupsIgnore" => true,
+            "alwaysOnline" => true,
+            "readMessages" => true,
+            "syncFullHistory" => true,
+            "webhook" => [
+                "url" => config('services.n8n.webhook_url'),
+                "base64" => true,
+                "byEvents" => true,
+                "events" => ["MESSAGES_SET", "MESSAGES_UPSERT"]
+            ]
+        ];
+    
+        return $this->sendRequest('post', '/instance/create', $payload)->json();
     }
     
     public function getInstanceStatus(string $instanceId): array
@@ -82,12 +94,13 @@ class EvolutionApiService
         return $this->sendRequest('delete', "/instance/logout/$instanceId")->json();
     }
 
-    private function withDefaultSettings(array $data): array
+    public function deleteInstance(string $instanceName): array
     {
-        return array_merge([
-            'integration' => 'WHATSAPP-BAILEYS',
-            'webhookBase64' => true,
-            'groupsIgnore' => true
-        ], $data);
+        return $this->sendRequest('delete', "/instance/delete/$instanceName")->json();
     }
+
+    // private function withDefaultSettings(array $data): array
+    // {
+    //     return 
+    // }
 }

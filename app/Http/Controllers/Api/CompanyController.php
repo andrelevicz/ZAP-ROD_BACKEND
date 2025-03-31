@@ -23,7 +23,16 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request)
     {
-        return new CompanyResource($this->companyService->createCompany($request->validated()));
+        try {
+            $company = $this->companyService->createCompany($request->validated());
+            return new CompanyResource($company);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Falha ao criar empresa',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show(Company $company)

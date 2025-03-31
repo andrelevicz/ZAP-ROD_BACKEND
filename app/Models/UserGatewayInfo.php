@@ -3,17 +3,10 @@
 namespace App\Models;
 use Illuminate\Support\Str;
 use App\Models\Base\UserGatewayInfo as BaseUserGatewayInfo;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class UserGatewayInfo extends BaseUserGatewayInfo
 {
-    protected static function boot()
-    {
-        parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::ulid();
-            }
-        });
-    }
+    use HasUlids;
 }

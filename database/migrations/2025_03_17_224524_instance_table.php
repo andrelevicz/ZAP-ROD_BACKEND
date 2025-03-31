@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('instances', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignUlid('company_id')->constrained('companies')->onDelete('cascade');
             $table->string('name');
             $table->string('instance_id')->unique();
             $table->unsignedInteger('status');

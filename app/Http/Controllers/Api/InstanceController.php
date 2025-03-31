@@ -24,11 +24,11 @@ class InstanceController extends Controller
         return InstanceResource::collection($instances);
     }
 
-    public function store(StoreInstanceRequest $request): InstanceResource
+    public function store(StoreInstanceRequest $request): array
     {
         $validated = $request->validated();
-        $instance = $this->instanceService->createInstance($validated);
-        return new InstanceResource($instance);
+        return $instance = $this->instanceService->createInstance($validated);
+        // return new InstanceResource($instance);
     }
 
     public function show(int $id): InstanceResource

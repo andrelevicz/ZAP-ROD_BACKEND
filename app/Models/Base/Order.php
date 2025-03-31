@@ -25,8 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property Company $company
  * @property Lead|null $lead
- * @property Collection|OrderItem[] $order_items
  * @property Collection|Payment[] $payments
+ * @property Collection|OrderItem[] $order_items
  *
  * @package App\Models\Base
  */
@@ -60,13 +60,13 @@ class Order extends Model
 		return $this->belongsTo(Lead::class);
 	}
 
-	public function order_items()
-	{
-		return $this->hasMany(OrderItem::class);
-	}
-
 	public function payments()
 	{
 		return $this->hasMany(Payment::class);
+	}
+
+	public function order_items()
+	{
+		return $this->hasMany(OrderItem::class);
 	}
 }

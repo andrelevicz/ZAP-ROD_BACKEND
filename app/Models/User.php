@@ -19,25 +19,10 @@ class User extends BaseUser implements JWTSubject, AuthenticatableContract
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
 
-        static::created(function ($user) {
-            if (!$user->gatewayInfo) {
-                Stripe::setApiKey(config('services.stripe.secret'));
-    
-                $customer = Customer::create([
-                    'email' => $user->email,
-                    'name' => $user->email
-                ]);
-    
-                UserGatewayInfo::create([
-                    'user_id' => $user->id,
-                    'stripe_customer_id' => $customer->id,
-                ]);
-            }
-        });
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified_at !== null;
     }
 
     public function getJWTIdentifier()
@@ -47,6 +32,9 @@ class User extends BaseUser implements JWTSubject, AuthenticatableContract
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'user_id' => $this->id,
+            'company_ids' => $this->companies->pluck('id')
+        ];
     }
 }

@@ -11,8 +11,10 @@ class CompanyService
         return Company::with('address')->get();
     }
 
-    public function createCompany(array $data)
+    public function createCompany(array $data): Company
     {
+        $data['user_id'] = auth()->id();
+        
         return Company::create($data);
     }
 

@@ -1,5 +1,49 @@
-
 services:
+  # Evolution API e seu banco de dados dedicado
+  evolution_api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v2.1.1
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+    networks:
+      - evolution-net
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    command: ["postgres", "-c", "max_connections=1000"]
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=evolution_password
+      - POSTGRES_USER=evolution
+      - POSTGRES_DB=evolution
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - evolution-net
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    command: >
+      redis-server --port 6379 --appendonly yes
+    volumes:
+      - evolution_redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - evolution-net
+
+  # Aplicação Laravel e serviços associados
   app:
     build:
       context: .
@@ -18,8 +62,12 @@ services:
       - DB_USERNAME=postgres 
       - DB_PASSWORD=postgres 
       - DB_SCHEMA=public
+      - EVOLUTION_API_URL=http://evolution_api:8080
     expose:
       - "9000"
+    networks:
+      - default
+      - evolution-net
 
   nginx:
     image: nginx:latest
@@ -32,7 +80,10 @@ services:
       - app
     environment:
       - NGINX_HOST=localhost
+    networks:
+      - default
 
+  # Banco de dados utilizado pela aplicação Laravel, Supabase Studio e demais
   db:
     image: supabase/postgres:15.8.1.020
     container_name: supabase-db
@@ -45,35 +96,44 @@ services:
       - ./volumes/db/data:/var/lib/postgresql/data
       - ./volumes/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - default
+
   studio:
     image: supabase/studio:20250113-83c9420
     depends_on:
       db:
         condition: service_healthy
     environment:
-      STUDIO_PG_META_URL: http://pg-meta:8080
+      STUDIO_PG_META_URL: http://pg_meta:8080
       SUPABASE_PUBLIC_URL: http://localhost:3000
     ports:
       - "3000:3000"
-  pg-meta:
+    networks:
+      - default
+
+  pg_meta:
     image: supabase/postgres-meta:v0.84.2
     environment:
       PG_META_DB_HOST: supabase-db
-      PG_META_DB_PORT: 5432
+      PG_META_DB_PORT: 5432 
       PG_META_DB_NAME: postgres
       PG_META_DB_USER: postgres
       PG_META_DB_PASSWORD: postgres
       PG_META_SSL_MODE: disable
     ports:
-      - "8081:8080"
+      - "8081:8080"  
     depends_on:
       - db
+    networks:
+      - default
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n
@@ -82,6 +142,8 @@ services:
       - "5678:5678"
     volumes:
       - n8n_data:/home/node/.n8n
+    networks:
+      - default
 
   mailpit:
     image: axllent/mailpit
@@ -92,7 +154,18 @@ services:
       - "8025:8025"
     environment:
       MP_MAX_MESSAGES: 5000
+    networks:
+      - default
 
 volumes:
+  evolution_instances:
+  postgres_data:
+  evolution_redis:
   n8n_data:
   supabase_data:
+
+networks:
+  evolution-net:
+    external: true
+  default:
+    driver: bridge
