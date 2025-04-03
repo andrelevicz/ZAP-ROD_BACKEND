@@ -63,6 +63,10 @@ class EvolutionApiService
             "webhook" => [
                 "url" => config('services.n8n.webhook_url'),
                 "base64" => true,
+                "headers" => [
+                    "Content-Type" => "application/json",
+                    'Accept' => 'application/json',
+                ],
                 "byEvents" => true,
                 "events" => ["MESSAGES_SET", "MESSAGES_UPSERT"]
             ]

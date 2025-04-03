@@ -12,6 +12,7 @@ services:
       - evolution_instances:/evolution/instances
     networks:
       - evolution-net
+      - default
     depends_on:
       - postgres
 
@@ -144,6 +145,7 @@ services:
       - n8n_data:/home/node/.n8n
     networks:
       - default
+      - evolution-net
 
   mailpit:
     image: axllent/mailpit
